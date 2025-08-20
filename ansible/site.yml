@@ -1,0 +1,28 @@
+---
+- name: Nginx installing
+  hosts: web
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install python3-six
+      raw: sudo apt update && sudo apt install -y python3-six
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Check nginx started and works
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy index.html
+      copy:
+        content: "<h1>Hello, Ansible</h1>"
+        dest: /var/www/html/index.html
+
+
